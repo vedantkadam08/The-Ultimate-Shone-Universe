@@ -7,7 +7,6 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;user-select:none;}
 html,body{height:100%;overflow:hidden;font-family:'Segoe UI',sans-serif;}
-/* GRADIENT BACKGROUND */
 body{background:linear-gradient(135deg,#ff75c3,#9b5de5);display:flex;justify-content:center;align-items:center;flex-direction:column;color:white;transition:background 1s ease;}
 .hidden{display:none;}
 .container{position:relative;z-index:1;width:90%;max-width:600px;text-align:center;padding:20px;}
@@ -20,7 +19,6 @@ button:hover{background:rgba(255,255,255,.35);}
 .name{font-size:3rem;font-weight:bold;background:linear-gradient(90deg,#fff,#ffd6ff,#fff);background-size:200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:shine 3s linear infinite,float 3s ease-in-out infinite;cursor:pointer;margin-bottom:10px;}
 @keyframes shine{0%{background-position:0%}100%{background-position:200%}}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
-/* Conveyor belts */
 .conveyor-belt{position:fixed;width:100%;overflow:hidden;white-space:nowrap;z-index:1;display:none;opacity:0.7;}
 .belt-top{top:10px;}
 .belt-bottom{bottom:10px;}
@@ -28,18 +26,15 @@ button:hover{background:rgba(255,255,255,.35);}
 .track.reverse{animation-direction:reverse;}
 .track img{height:100px;margin:0 10px;border:3px solid white;border-radius:8px;}
 @keyframes slide{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
-/* Fireworks & Hearts */
 .firework{position:absolute;font-size:24px;animation:explode 1s ease-out forwards;}
 @keyframes explode{to{transform:translateY(-100px) scale(2);opacity:0}}
 .heart{position:fixed;bottom:-50px;pointer-events:none;animation:floatHeart 5s linear infinite;font-size:20px;z-index:999;}
 @keyframes floatHeart{0%{transform:translateY(0) rotate(0deg);opacity:1}100%{transform:translateY(-110vh) rotate(360deg);opacity:0}}
-/* Checklist */
 #checklist{position:fixed;top:10px;right:10px;background:rgba(255,255,255,0.2);padding:10px 15px;border-radius:15px;font-size:0.9rem;z-index:999;}
 </style>
 </head>
 <body>
 
-<!-- Landing Page -->
 <div id="landing" class="container">
   <h1>Open When Messages 💌</h1>
   <div class="msg-box" onclick="openFromLandingPage('homage','romantic')">Open when you're sad 😢</div>
@@ -49,7 +44,6 @@ button:hover{background:rgba(255,255,255,.35);}
   <button onclick="enterUniverse()">Enter Babde's Universe 💜</button>
 </div>
 
-<!-- Universe Page -->
 <div id="universe" class="container hidden">
   <div id="stars"></div>
   <img id="slideshow" src="" alt="" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;opacity:0.3;z-index:-1;">
@@ -65,7 +59,6 @@ button:hover{background:rgba(255,255,255,.35);}
     <button onclick="showPage('secret','lofi')">🔐 Secret</button>
   </div>
 
-  <!-- Pages -->
   <div id="homage" class="page hidden"><div class="msg-box">💜 Welcome Babde! This is your Eternal Love Universe.<br>Every day with you is magical 💖</div></div>
   <div id="story" class="page hidden"><div class="msg-box">📖 Once upon a time, on 02/10/2024, two idiots fell in love…💕</div></div>
   <div id="rain" class="page hidden"><div class="msg-box">🌧️ Even in my worst storms, you are my calm breeze💜</div></div>
@@ -99,7 +92,6 @@ button:hover{background:rgba(255,255,255,.35);}
 
 </div>
 
-<!-- Music -->
 <audio id="romantic" loop><source src="https://www.bensound.com/bensound-music/bensound-romantic.mp3" type="audio/mp3"></audio>
 <audio id="sad" loop><source src="https://www.bensound.com/bensound-music/bensound-slowmotion.mp3" type="audio/mp3"></audio>
 <audio id="lofi" loop><source src="https://www.bensound.com/bensound-music/bensound-littleidea.mp3" type="audio/mp3"></audio>
@@ -112,30 +104,34 @@ const checklist=document.getElementById('checklist');
 let currentPage="";
 let currentMusic=null;
 
-/* Landing -> Universe button */
+/* Enter Universe */
 function enterUniverse(){
   document.getElementById('landing').classList.add('hidden');
   document.getElementById('universe').classList.remove('hidden');
   initUniverse();
 }
 
-/* Landing "Open When" messages directly open page without Universe homepage */
+/* Landing Open When */
 function openFromLandingPage(pageId, musicType){
   document.getElementById('landing').classList.add('hidden');
-  // show only the page
-  const page=document.getElementById(pageId);
-  if(page) page.classList.remove('hidden');
-  currentPage=pageId;
+  const universe = document.getElementById('universe');
+  universe.classList.remove('hidden');
 
-  // play music safely
+  const pages = universe.querySelectorAll('.page');
+  pages.forEach(p => p.classList.add('hidden'));
+
+  const page = document.getElementById(pageId);
+  if(page) page.classList.remove('hidden');
+  currentPage = pageId;
+
   if(currentMusic) currentMusic.pause();
-  currentMusic=document.getElementById(musicType);
+  currentMusic = document.getElementById(musicType);
   if(currentMusic){ currentMusic.currentTime=0; currentMusic.play().catch(()=>{}); }
-  const fade=document.getElementById("fadeSFX");
+  const fade = document.getElementById("fadeSFX");
   if(fade){ fade.play().catch(()=>{}); }
 }
 
-/* Init stars, slideshow, counter */
+/* Init Universe */
 function initUniverse(){
   for(let i=0;i<150;i++){
     let s=document.createElement('div');s.className='star';s.style.top=Math.random()*100+'%';s.style.left=Math.random()*100+'%';s.style.width=s.style.height=Math.random()*2+'px';document.getElementById('stars').appendChild(s);
@@ -158,7 +154,7 @@ function initUniverse(){
   updateCounter();
 }
 
-/* Page Nav & Music with safety checks */
+/* Page nav */
 function showPage(id,musicType){
   if(currentPage){
     const oldPage=document.getElementById(currentPage);
@@ -175,7 +171,7 @@ function showPage(id,musicType){
   if(fade){ fade.play().catch(()=>{}); }
 }
 
-/* Proposal, checklist, secrets, floating hearts remain unchanged */
+/* Proposal, secrets, checklist remain the same */
 function yesForever(){
   const proposalBox=document.getElementById('proposal-box');
   proposalBox.innerHTML="FOREVER STARTS NOW 💜";
@@ -213,7 +209,6 @@ function checkPassword(){
   }
 }
 
-/* Floating Hearts */
 setInterval(()=>{
   const heart=document.createElement("div");
   heart.classList.add("heart");
