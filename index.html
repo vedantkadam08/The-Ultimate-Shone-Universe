@@ -1,178 +1,187 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Babde Forever 💜</title>
-
+<title>Babde Eternal Love 💜</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif;}
-
-body{
-min-height:100vh;
-overflow:hidden;
-background:linear-gradient(-45deg,#ff9ed8,#c77dff,#ff6ec7,#a855f7);
-background-size:400% 400%;
-animation:gradient 15s ease infinite;
-color:white;
-transition:1s;
-}
-
-@keyframes gradient{
-0%{background-position:0% 50%;}
-50%{background-position:100% 50%;}
-100%{background-position:0% 50%;}
-}
-
-.container{
-min-height:100vh;
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-text-align:center;
-padding:20px;
-position:relative;
-z-index:2;
-}
-
-.name{
-font-size:2.5rem;
-font-weight:bold;
-background:linear-gradient(90deg,#fff,#ffd6ff,#fff);
-background-size:200%;
--webkit-background-clip:text;
--webkit-text-fill-color:transparent;
-animation:shine 3s linear infinite,float 3s ease-in-out infinite;
-cursor:pointer;
-}
-
+*{margin:0;padding:0;box-sizing:border-box;user-select:none;}
+html,body{height:100%;overflow:hidden;background:linear-gradient(135deg,#ff75c3,#9b5de5);color:white;display:flex;justify-content:center;align-items:center;flex-direction:column;font-family:'Segoe UI',sans-serif;}
+#stars{position:absolute;top:0;left:0;width:100%;height:100%;background:black;z-index:0;overflow:hidden;}
+.star{position:absolute;width:2px;height:2px;background:white;border-radius:50%;opacity:0.8;}
+.container{position:relative;z-index:1;width:100%;max-width:600px;text-align:center;padding:20px;}
+.name{font-size:3rem;font-weight:bold;background:linear-gradient(90deg,#fff,#ffd6ff,#fff);background-size:200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:shine 3s linear infinite,float 3s ease-in-out infinite;cursor:pointer;margin-bottom:10px;}
 @keyframes shine{0%{background-position:0%}100%{background-position:200%}}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
-
-.counter{margin-top:10px;font-size:1rem;opacity:.9}
-
-button{
-margin:6px;
-padding:10px 18px;
-border:none;
-border-radius:25px;
-background:rgba(255,255,255,.2);
-color:white;
-}
-
-.page{display:none;margin-top:20px;white-space:pre-line;max-width:500px;}
-
-.ring{
-font-size:60px;
-animation:pop 1s ease forwards;
-}
-
-@keyframes pop{
-0%{transform:scale(0)}
-100%{transform:scale(1.2)}
-}
-
+.counter{font-size:1rem;margin-bottom:20px;}
+button{margin:5px;padding:10px 18px;border:none;border-radius:25px;background:rgba(255,255,255,.2);color:white;font-size:1rem;cursor:pointer;transition:.3s;}
+button:hover{background:rgba(255,255,255,.35);}
+.page{display:none;}
+.msg-box{background:rgba(255,255,255,.15);border-radius:15px;padding:15px;margin:15px 0;animation:floatBox 6s ease-in-out infinite;}
+@keyframes floatBox{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px)}}
+.ring{font-size:70px;animation:glow 1.5s infinite alternate;}
+@keyframes glow{from{transform:scale(1)}to{transform:scale(1.2);filter:drop-shadow(0 0 20px pink)}}
+.firework{position:absolute;font-size:24px;animation:explode 1s ease-out forwards;}
+@keyframes explode{to{transform:translateY(-100px) scale(2);opacity:0}}
 .fade-out{animation:fadeout 3s forwards;}
 @keyframes fadeout{to{opacity:0}}
+#slideshow{position:absolute;top:0;left:0;width:100%;height:100%;z-index:-1;object-fit:cover;opacity:0.3;}
 
+/* --- Conveyor Belts --- */
+.conveyor-belt{position:fixed;width:100%;overflow:hidden;white-space:nowrap;z-index:1;display:none;opacity:0.7;}
+.belt-top{top:10px;}
+.belt-bottom{bottom:10px;}
+.track{display:inline-flex;animation:slide 45s linear infinite;}
+.track img{height:100px;margin:0 10px;border:3px solid white;border-radius:8px;}
+.track.reverse{animation-direction:reverse;}
+@keyframes slide{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+/* Sparkle hearts on conveyor belts */
+.sparkle{position:absolute;font-size:20px;animation:floatSparkle 3s ease-in-out infinite;}
+@keyframes floatSparkle{0%{transform:translateY(0)}50%{transform:translateY(-10px)}100%{transform:translateY(0)}}
 </style>
 </head>
-
 <body>
-<div class="container">
 
+<div id="stars"></div>
+<img id="slideshow" src="" alt="">
+
+<div class="container">
 <div class="name" id="name">Babde 💜</div>
 <div class="counter" id="counter"></div>
-
-<button onclick="proposalMode()">💍 Proposal</button>
-<button onclick="loveStory()">📖 Love Story</button>
-<button onclick="rainMode()">🌧️ Rain</button>
-<button onclick="secretPage()">🔐 Secret</button>
-
-<div id="message" class="page"></div>
-
+<div id="nav">
+<button onclick="showPage('homage','romantic')">🏠 Homage</button>
+<button onclick="showPage('story','romantic')">📖 Love Story</button>
+<button onclick="showPage('rain','sad')">🌧️ Rain</button>
+<button onclick="showPage('universe','romantic')">🌌 Universe</button>
+<button onclick="showPage('proposal','energetic')">💍 Proposal</button>
+<button onclick="showPage('secret','lofi')">🔐 Secret</button>
 </div>
 
-<audio id="bgm" loop></audio>
-<audio id="heartbeat" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_4f2a7c5b9f.mp3?filename=heartbeat-11093.mp3"></audio>
+<!-- Pages -->
+<div id="homage" class="page"><div class="msg-box">💜 Welcome Babde! This is your Eternal Love Universe.<br>Every day with you is magical 💖</div></div>
+<div id="story" class="page"><div class="msg-box">📖 Once upon a time, on 02/10/2024, two idiots fell in love… They never thought they would become a part of eachothers day and now just look and them. They are now struggling together to achive success, so that one day they both can marry eachother💕</div></div>
+<div id="rain" class="page"><div class="msg-box">🌧️ Even in my worst storms, you are my calm breeze💜</div></div>
+<div id="universe" class="page"><div class="msg-box">🌌 In every universe, I would still choose you 💖</div></div>
+<div id="proposal" class="page">
+  <div class="msg-box" id="proposal-box">
+    <div class="ring">💍</div><br>
+    Babde... Mazha shi lagna karshil? 💜<br>
+    <button onclick="yesForever()">Ho 💖</button><button onclick="yesForever()">Obviously Ho 😌</button>
+  </div>
+</div>
+<div id="secret" class="page">
+  <div class="msg-box">🔐 Enter Password: <input type="password" id="pass" placeholder="Password"><button onclick="checkPassword()">Unlock 💜</button></div>
+  <div id="secret-msg" class="msg-box" style="display:none;"></div>
+</div>
+</div>
+
+<!-- Conveyor belts for proposal -->
+<div class="conveyor-belt belt-top" id="proposal-top-belt">
+  <div class="track">
+    <img src="image/pic1.jpg"><img src="image/pic2.jpg"><img src="image/pic3.jpg"><img src="image/pic4.jpg">
+    <img src="image/pic5.jpg"><img src="image/pic6.jpg"><img src="image/pic7.jpg"><img src="image/pic8.jpg">
+    <img src="image/pic9.jpg"><img src="image/pic10.jpg"><img src="image/pic11.jpg"><img src="image/pic12.jpg">
+    <img src="image/pic1.jpg"><img src="image/pic2.jpg"><img src="image/pic3.jpg"><img src="image/pic4.jpg">
+    <img src="image/pic5.jpg"><img src="image/pic6.jpg"><img src="image/pic7.jpg"><img src="image/pic8.jpg">
+  </div>
+</div>
+<div class="conveyor-belt belt-bottom" id="proposal-bottom-belt">
+  <div class="track reverse">
+    <img src="image/pic13.jpg"><img src="image/pic14.jpg"><img src="image/pic15.jpg"><img src="image/pic16.jpg">
+    <img src="image/pic17.jpg"><img src="image/pic18.jpg"><img src="image/pic19.jpg"><img src="image/pic20.jpg">
+    <img src="image/pic21.jpg"><img src="image/pic22.jpg"><img src="image/pic23.jpg"><img src="image/pic24.jpg">
+    <img src="image/pic13.jpg"><img src="image/pic14.jpg"><img src="image/pic15.jpg"><img src="image/pic16.jpg">
+    <img src="image/pic17.jpg"><img src="image/pic18.jpg"><img src="image/pic19.jpg"><img src="image/pic20.jpg">
+  </div>
+</div>
+
+<!-- Audio -->
+<audio id="romantic" loop><source src="https://www.bensound.com/bensound-music/bensound-romantic.mp3" type="audio/mp3"></audio>
+<audio id="sad" loop><source src="https://www.bensound.com/bensound-music/bensound-slowmotion.mp3" type="audio/mp3"></audio>
+<audio id="lofi" loop><source src="https://www.bensound.com/bensound-music/bensound-littleidea.mp3" type="audio/mp3"></audio>
+<audio id="energetic" loop><source src="https://www.bensound.com/bensound-music/bensound-epic.mp3" type="audio/mp3"></audio>
+<audio id="fadeSFX" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_42619.mp3?filename=button-124113.mp3"></audio>
 
 <script>
+/* STARS */
+for(let i=0;i<150;i++){
+let s=document.createElement('div');s.className='star';s.style.top=Math.random()*100+'%';s.style.left=Math.random()*100+'%';s.style.width=s.style.height=Math.random()*2+'px';document.getElementById('stars').appendChild(s);
+}
 
-/* ===== DAYS COUNTER ===== */
+/* SLIDESHOW */
+const slides=["https://via.placeholder.com/600x800?text=Love1","https://via.placeholder.com/600x800?text=Love2","https://via.placeholder.com/600x800?text=Love3"];
+let slideIndex=0;
+const slideshow=document.getElementById('slideshow');
+setInterval(()=>{slideshow.src=slides[slideIndex];slideIndex=(slideIndex+1)%slides.length;},5000);
+
+/* COUNTER */
 const startDate=new Date("2024-10-02T00:00:00");
 function updateCounter(){
 const now=new Date();
 const diff=now-startDate;
-const days=Math.floor(diff/(1000*60*60*24));
-const hours=Math.floor((diff/(1000*60*60))%24);
-const minutes=Math.floor((diff/(1000*60))%60);
-document.getElementById("counter").innerText=
-"Babde, we have been in love for "+days+" days "+hours+" hours "+minutes+" minutes 💜";
+const d=Math.floor(diff/(1000*60*60*24));
+const h=Math.floor((diff/(1000*60*60))%24);
+const m=Math.floor((diff/(1000*60))%60);
+document.getElementById("counter").innerText="Babde, we have been in love for "+d+" days "+h+" hours "+m+" minutes 💜";
 }
 setInterval(updateCounter,1000);
 updateCounter();
 
-/* ===== LOVE STORY ===== */
-function loveStory(){
-showMessage("Once upon a time...\nOn 02/10/2024,\nTwo idiots fell in love.\nAni tyancha world change zala forever 💖");
+/* PAGE NAV & MUSIC */
+let currentPage="";
+let currentMusic=null;
+function showPage(id,musicType){
+if(currentPage){document.getElementById(currentPage).style.display="none";}
+document.getElementById(id).style.display="block";
+currentPage=id;
+if(currentMusic) currentMusic.pause();
+currentMusic=document.getElementById(musicType);
+currentMusic.currentTime=0;
+currentMusic.play();
+document.getElementById("fadeSFX").play();
 }
 
-/* ===== RAIN ===== */
-function rainMode(){
-showMessage("Even in my worst storms,\nyou are my calm 🌧️💜");
-}
-
-/* ===== PASSWORD ===== */
-function secretPage(){
-let pass=prompt("Enter Password 💜");
-if(pass==="021024"){
-showMessage("Only you and me forever 💖\nTu majhi aahes ani nehmi rahnar.");
-}
-}
-
-/* ===== ULTRA PROPOSAL ===== */
-function proposalMode(){
-let msg=document.getElementById("message");
-msg.style.display="block";
-msg.innerHTML="<div class='ring'>💍</div><br>Babde...<br><br>Will you stay forever with me? 💜<br><br><button onclick='yesForever()'>Yes 💖</button><button onclick='yesForever()'>Of Course Yes 😌</button>";
-document.getElementById("heartbeat").play();
-}
-
-function yesForever(){
-document.getElementById("message").innerHTML="You just made me the happiest person alive 💜<br>This is just the beginning of our forever.";
-}
-
-/* ===== FUTURE KIDS (Tap Name 7 times) ===== */
+/* FUTURE KIDS SECRET */
 let taps=0;
 document.getElementById("name").addEventListener("click",()=>{
-taps++;
-if(taps===7){
-showMessage("Imagine tiny version of us running around…\nTujha smile ani majha attitude 😌💜");
-}
+taps++;if(taps===7){alert("Imagine Appla lagna zala, 2-3 years ni appla sarkha 2 pora astil. Ek mulgi ji full tuzha sarkhi asel ani ek mulga jo mazha sarkha asel… 😌💜");}
 });
 
-/* ===== BIRTHDAY MODE (11 OCT) ===== */
-let today=new Date();
-if(today.getDate()==11 && today.getMonth()==9){
-showMessage("Happy Birthday My Love 🎂💜");
+/* PASSWORD */
+function checkPassword(){
+let val=document.getElementById("pass").value;
+if(val==="021024"){document.getElementById("secret-msg").style.display="block";
+document.getElementById("secret-msg").innerText="Hamesha bass TU ani MI 💖\nTu majhi aahes ani nehmi rahnar.";}
 }
 
-/* ===== CINEMATIC END AFTER 1 MIN ===== */
-setTimeout(()=>{
-document.body.classList.add("fade-out");
-setTimeout(()=>{
-document.body.innerHTML="<div style='display:flex;justify-content:center;align-items:center;height:100vh;font-size:1.5rem;text-align:center;background:black;color:white;'>And this is just the beginning… 💜</div>";
-},3000);
-},60000);
+/* PROPOSAL */
+function yesForever(){
+let box=document.getElementById("proposal-box");
+box.innerHTML="FOREVER STARTS NOW 💜";
 
-/* ===== MESSAGE ===== */
-function showMessage(text){
-let msg=document.getElementById("message");
-msg.style.display="block";
-msg.innerText=text;
+/* Show conveyor belts */
+document.getElementById('proposal-top-belt').style.display='block';
+document.getElementById('proposal-bottom-belt').style.display='block';
+
+/* Fireworks + sparkle hearts on belts */
+for(let i=0;i<50;i++){
+let f=document.createElement("div");f.className="firework";f.style.left=Math.random()*100+"vw";f.style.top=Math.random()*100+"vh";f.innerHTML="✨";document.body.appendChild(f);setTimeout(()=>f.remove(),1500);}
+for(let i=0;i<30;i++){
+let s=document.createElement("div");s.className="sparkle";s.innerHTML="💖";s.style.left=Math.random()*100+"vw";s.style.top=Math.random()*100+"vh";document.body.appendChild(s);setTimeout(()=>s.remove(),6000);}
+setTimeout(()=>{document.body.classList.add("fade-out");setTimeout(()=>{document.body.innerHTML="<div style='display:flex;justify-content:center;align-items:center;height:100vh;background:black;color:white;font-size:1.6rem;text-align:center;'>And this is just the beginning… 💜</div>";},30000);},0);
 }
 
+/* FLOATING HEARTS */
+setInterval(()=>{
+const heart=document.createElement("div");
+heart.classList.add("heart");
+heart.innerHTML=["❤️","💖","💕","🌸"][Math.floor(Math.random()*4)];
+heart.style.left=Math.random()*100+"vw";
+heart.style.fontSize=(Math.random()*20+10)+"px";
+heart.style.animationDuration=(Math.random()*2+3)+"s";
+document.body.appendChild(heart);
+setTimeout(()=>heart.remove(),5000);
+},400);
 </script>
 </body>
 </html>
