@@ -31,10 +31,13 @@ button:hover{background:rgba(255,255,255,.35);}
 .heart{position:fixed;bottom:-50px;pointer-events:none;animation:floatHeart 5s linear infinite;font-size:20px;z-index:999;}
 @keyframes floatHeart{0%{transform:translateY(0) rotate(0deg);opacity:1}100%{transform:translateY(-110vh) rotate(360deg);opacity:0}}
 #checklist{position:fixed;top:10px;right:10px;background:rgba(255,255,255,0.2);padding:10px 15px;border-radius:15px;font-size:0.9rem;z-index:999;}
+/* fix clickable buttons over slideshow */
+#slideshow{pointer-events:none;}
 </style>
 </head>
 <body>
 
+<!-- Landing Page -->
 <div id="landing" class="container">
   <h1>Open When Messages 💌</h1>
   <div class="msg-box" onclick="openFromLandingPage('homage','romantic')">Open when you're sad 😢</div>
@@ -44,12 +47,13 @@ button:hover{background:rgba(255,255,255,.35);}
   <button onclick="enterUniverse()">Enter Babde's Universe 💜</button>
 </div>
 
+<!-- Universe Page -->
 <div id="universe" class="container hidden">
   <div id="stars"></div>
   <img id="slideshow" src="" alt="" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;opacity:0.3;z-index:-1;">
   <div class="name" id="name">Babde 💜</div>
   <div class="counter" id="counter"></div>
-  
+
   <div id="nav">
     <button onclick="showPage('homage','romantic')">🏠 Homage</button>
     <button onclick="showPage('story','romantic')">📖 Love Story</button>
@@ -59,6 +63,7 @@ button:hover{background:rgba(255,255,255,.35);}
     <button onclick="showPage('secret','lofi')">🔐 Secret</button>
   </div>
 
+  <!-- Pages -->
   <div id="homage" class="page hidden"><div class="msg-box">💜 Welcome Babde! This is your Eternal Love Universe.<br>Every day with you is magical 💖</div></div>
   <div id="story" class="page hidden"><div class="msg-box">📖 Once upon a time, on 02/10/2024, two idiots fell in love…💕</div></div>
   <div id="rain" class="page hidden"><div class="msg-box">🌧️ Even in my worst storms, you are my calm breeze💜</div></div>
@@ -77,6 +82,7 @@ button:hover{background:rgba(255,255,255,.35);}
 
   <div id="checklist">Secrets found: 0/4</div>
 
+  <!-- Conveyor belts -->
   <div class="conveyor-belt belt-top" id="top-belt">
     <div class="track reverse">
       <img src="image/pic1.jpg"><img src="image/pic2.jpg"><img src="image/pic3.jpg"><img src="image/pic4.jpg">
@@ -92,6 +98,7 @@ button:hover{background:rgba(255,255,255,.35);}
 
 </div>
 
+<!-- Music -->
 <audio id="romantic" loop><source src="https://www.bensound.com/bensound-music/bensound-romantic.mp3" type="audio/mp3"></audio>
 <audio id="sad" loop><source src="https://www.bensound.com/bensound-music/bensound-slowmotion.mp3" type="audio/mp3"></audio>
 <audio id="lofi" loop><source src="https://www.bensound.com/bensound-music/bensound-littleidea.mp3" type="audio/mp3"></audio>
@@ -104,6 +111,26 @@ const checklist=document.getElementById('checklist');
 let currentPage="";
 let currentMusic=null;
 
+/* Landing Open When */
+function openFromLandingPage(pageId, musicType){
+  document.getElementById('landing').classList.add('hidden');
+  const universe=document.getElementById('universe');
+  universe.classList.remove('hidden');
+  
+  const pages=universe.querySelectorAll('.page');
+  pages.forEach(p=>p.classList.add('hidden'));
+  
+  const page=document.getElementById(pageId);
+  if(page) page.classList.remove('hidden');
+  currentPage=pageId;
+  
+  if(currentMusic) currentMusic.pause();
+  currentMusic=document.getElementById(musicType);
+  if(currentMusic){ currentMusic.currentTime=0; currentMusic.play().catch(()=>{}); }
+  const fade=document.getElementById("fadeSFX");
+  if(fade){ fade.play().catch(()=>{}); }
+}
+
 /* Enter Universe */
 function enterUniverse(){
   document.getElementById('landing').classList.add('hidden');
@@ -111,27 +138,7 @@ function enterUniverse(){
   initUniverse();
 }
 
-/* Landing Open When */
-function openFromLandingPage(pageId, musicType){
-  document.getElementById('landing').classList.add('hidden');
-  const universe = document.getElementById('universe');
-  universe.classList.remove('hidden');
-
-  const pages = universe.querySelectorAll('.page');
-  pages.forEach(p => p.classList.add('hidden'));
-
-  const page = document.getElementById(pageId);
-  if(page) page.classList.remove('hidden');
-  currentPage = pageId;
-
-  if(currentMusic) currentMusic.pause();
-  currentMusic = document.getElementById(musicType);
-  if(currentMusic){ currentMusic.currentTime=0; currentMusic.play().catch(()=>{}); }
-  const fade = document.getElementById("fadeSFX");
-  if(fade){ fade.play().catch(()=>{}); }
-}
-
-/* Init Universe */
+/* Init Universe visuals and counter */
 function initUniverse(){
   for(let i=0;i<150;i++){
     let s=document.createElement('div');s.className='star';s.style.top=Math.random()*100+'%';s.style.left=Math.random()*100+'%';s.style.width=s.style.height=Math.random()*2+'px';document.getElementById('stars').appendChild(s);
@@ -140,7 +147,7 @@ function initUniverse(){
   let slideIndex=0;
   const slideshow=document.getElementById('slideshow');
   setInterval(()=>{slideshow.src=slides[slideIndex];slideIndex=(slideIndex+1)%slides.length;},5000);
-
+  
   const startDate=new Date("2024-10-02T00:00:00");
   function updateCounter(){
     const now=new Date();
@@ -156,14 +163,11 @@ function initUniverse(){
 
 /* Page nav */
 function showPage(id,musicType){
-  if(currentPage){
-    const oldPage=document.getElementById(currentPage);
-    if(oldPage) oldPage.classList.add('hidden');
-  }
-  const newPage=document.getElementById(id);
-  if(newPage) newPage.classList.remove('hidden');
+  if(currentPage){ const old=document.getElementById(currentPage); if(old) old.classList.add('hidden'); }
+  const page=document.getElementById(id);
+  if(page) page.classList.remove('hidden');
   currentPage=id;
-
+  
   if(currentMusic) currentMusic.pause();
   currentMusic=document.getElementById(musicType);
   if(currentMusic){ currentMusic.currentTime=0; currentMusic.play().catch(()=>{}); }
@@ -171,12 +175,13 @@ function showPage(id,musicType){
   if(fade){ fade.play().catch(()=>{}); }
 }
 
-/* Proposal, secrets, checklist remain the same */
+/* Proposal */
 function yesForever(){
   const proposalBox=document.getElementById('proposal-box');
   proposalBox.innerHTML="FOREVER STARTS NOW 💜";
   document.getElementById('top-belt').style.display='block';
   document.getElementById('bottom-belt').style.display='block';
+  
   for(let i=0;i<50;i++){
     let f=document.createElement("div");f.className="firework";f.style.left=Math.random()*100+"vw";f.style.top=Math.random()*100+"vh";f.innerHTML="✨";document.body.appendChild(f);
     setTimeout(()=>f.remove(),1500);
@@ -196,8 +201,10 @@ function yesForever(){
   },30000);
 }
 
+/* Checklist */
 function updateChecklist(){ checklist.innerText="Secrets found: "+secretsFound+"/4"; }
 
+/* Password Secret */
 function checkPassword(){
   let val=document.getElementById("pass").value;
   if(val==="021024"){
@@ -209,6 +216,7 @@ function checkPassword(){
   }
 }
 
+/* Floating hearts */
 setInterval(()=>{
   const heart=document.createElement("div");
   heart.classList.add("heart");
@@ -219,12 +227,14 @@ setInterval(()=>{
   setTimeout(()=>heart.remove(),5000);
 },400);
 
+/* Future Kids Secret */
 let taps=0;
 document.getElementById("name").addEventListener("click",()=>{
   taps++;
   if(taps===7){ secretsFound++; updateChecklist(); alert("Imagine Appla lagna zala, 2-3 years ni appla sarkha 2 pora astil… 😌💜"); }
 });
 
+/* Ring Secret */
 let holdTimer=null;
 document.addEventListener("DOMContentLoaded", function(){
   const ring=document.getElementById("ring");
