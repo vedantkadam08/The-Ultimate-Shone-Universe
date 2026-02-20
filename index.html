@@ -6,91 +6,102 @@
 <title>Babde Eternal Love 💜</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;user-select:none;}
-html,body{height:100%;overflow:hidden;background:linear-gradient(135deg,#ff75c3,#9b5de5);color:white;display:flex;justify-content:center;align-items:center;flex-direction:column;font-family:'Segoe UI',sans-serif;}
-#stars{position:absolute;top:0;left:0;width:100%;height:100%;background:black;z-index:0;overflow:hidden;}
+html,body{height:100%;overflow:hidden;font-family:'Segoe UI',sans-serif;}
+/* GRADIENT BACKGROUND */
+body{background:linear-gradient(135deg,#ff75c3,#9b5de5);display:flex;justify-content:center;align-items:center;flex-direction:column;color:white;transition:background 1s ease;}
+.hidden{display:none;}
+.container{position:relative;z-index:1;width:90%;max-width:600px;text-align:center;padding:20px;}
+button{margin:5px;padding:10px 18px;border:none;border-radius:25px;background:rgba(255,255,255,.2);color:white;font-size:1rem;cursor:pointer;transition:.3s;}
+button:hover{background:rgba(255,255,255,.35);}
+.msg-box{background:rgba(255,255,255,.15);border-radius:15px;padding:15px;margin:15px 0;animation:floatBox 6s ease-in-out infinite;}
+@keyframes floatBox{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px)}}
+#stars{position:absolute;top:0;left:0;width:100%;height:100%;z-index:0;overflow:hidden;}
 .star{position:absolute;width:2px;height:2px;background:white;border-radius:50%;opacity:0.8;}
-.container{position:relative;z-index:1;width:100%;max-width:600px;text-align:center;padding:20px;}
 .name{font-size:3rem;font-weight:bold;background:linear-gradient(90deg,#fff,#ffd6ff,#fff);background-size:200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:shine 3s linear infinite,float 3s ease-in-out infinite;cursor:pointer;margin-bottom:10px;}
 @keyframes shine{0%{background-position:0%}100%{background-position:200%}}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
-.counter{font-size:1rem;margin-bottom:20px;}
-button{margin:5px;padding:10px 18px;border:none;border-radius:25px;background:rgba(255,255,255,.2);color:white;font-size:1rem;cursor:pointer;transition:.3s;}
-button:hover{background:rgba(255,255,255,.35);}
-.page{display:none;}
-.msg-box{background:rgba(255,255,255,.15);border-radius:15px;padding:15px;margin:15px 0;animation:floatBox 6s ease-in-out infinite;}
-@keyframes floatBox{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px)}}
-.ring{font-size:70px;animation:glow 1.5s infinite alternate;cursor:pointer;}
-@keyframes glow{from{transform:scale(1)}to{transform:scale(1.2);filter:drop-shadow(0 0 20px pink)}}
-.firework{position:absolute;font-size:24px;animation:explode 1s ease-out forwards;}
-@keyframes explode{to{transform:translateY(-100px) scale(2);opacity:0}}
-.fade-out{animation:fadeout 3s forwards;}
-@keyframes fadeout{to{opacity:0}}
-#slideshow{position:absolute;top:0;left:0;width:100%;height:100%;z-index:-1;object-fit:cover;opacity:0.3;}
+/* Conveyor belts */
 .conveyor-belt{position:fixed;width:100%;overflow:hidden;white-space:nowrap;z-index:1;display:none;opacity:0.7;}
 .belt-top{top:10px;}
 .belt-bottom{bottom:10px;}
-.track{display:inline-flex;animation:slide 25s linear infinite;}
-.track img{height:100px;margin:0 10px;border:3px solid white;border-radius:8px;}
+.track{display:inline-flex;animation:slide 30s linear infinite;}
 .track.reverse{animation-direction:reverse;}
-@keyframes slide{from{transform:translateX(0);}to{transform:translateX(-50%);}}
-
+.track img{height:100px;margin:0 10px;border:3px solid white;border-radius:8px;}
+@keyframes slide{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+/* Fireworks & Hearts */
+.firework{position:absolute;font-size:24px;animation:explode 1s ease-out forwards;}
+@keyframes explode{to{transform:translateY(-100px) scale(2);opacity:0}}
+.heart{position:fixed;bottom:-50px;pointer-events:none;animation:floatHeart 5s linear infinite;font-size:20px;z-index:999;}
+@keyframes floatHeart{0%{transform:translateY(0) rotate(0deg);opacity:1}100%{transform:translateY(-110vh) rotate(360deg);opacity:0}}
 /* Checklist */
-#checklist{position:fixed;top:10px;right:10px;background:rgba(255,255,255,0.2);padding:10px 15px;border-radius:15px;font-size:0.9rem;z-index:10;}
-
-/* Final Secret Animation */
-.final-secret{display:none;background:rgba(255,192,203,0.8);color:white;padding:20px;border-radius:20px;font-size:1.5rem;margin-top:20px;opacity:0;transition:opacity 3s ease-in-out;}
-.final-secret.show{display:block;opacity:1;}
+#checklist{position:fixed;top:10px;right:10px;background:rgba(255,255,255,0.2);padding:10px 15px;border-radius:15px;font-size:0.9rem;z-index:999;}
 </style>
 </head>
 <body>
 
-<div id="stars"></div>
-<img id="slideshow" src="" alt="">
-
-<div class="container">
-<div class="name" id="name">Babde 💜</div>
-<div class="counter" id="counter"></div>
-<div id="nav">
-<button onclick="showPage('homage','romantic')">🏠 Homage</button>
-<button onclick="showPage('story','romantic')">📖 Love Story</button>
-<button onclick="showPage('rain','sad')">🌧️ Rain</button>
-<button onclick="showPage('universe','romantic')">🌌 Universe</button>
-<button onclick="showPage('proposal','energetic')">💍 Proposal</button>
-<button onclick="showPage('secret','lofi')">🔐 Secret</button>
+<!-- Landing Page -->
+<div id="landing" class="container">
+  <h1>Open When Messages 💌</h1>
+  <div class="msg-box">Open when you're sad 😢</div>
+  <div class="msg-box">Open when you miss me 💖</div>
+  <div class="msg-box">Open when you can't sleep 🌙</div>
+  <div class="msg-box">Open when you need motivation ⚡</div>
+  <button onclick="enterUniverse()">Enter Babde's Universe 💜</button>
 </div>
 
-<div id="homage" class="page"><div class="msg-box">💜 Welcome Babde! This is your Eternal Love Universe.<br>Every day with you is magical 💖</div></div>
-<div id="story" class="page"><div class="msg-box">📖 Once upon a time, on 02/10/2024, two idiots fell in love… They never thought they would become a part of eachothers day and now just look at them. They are now struggling together to achieve success, so that one day they both can marry each other💕</div></div>
-<div id="rain" class="page"><div class="msg-box">🌧️ Even in my worst storms, you are my calm breeze💜</div></div>
-<div id="universe" class="page"><div class="msg-box">🌌 In every universe, I would still choose you 💖</div></div>
-<div id="proposal" class="page">
-  <div class="msg-box" id="proposal-box">
-    <div class="ring" id="proposal-ring">💍</div><br>
-    Babde... Mazha shi lagna karshil? 💜<br>
-    <button onclick="yesForever()">Ho 💖</button><button onclick="yesForever()">Obviously Ho 😌</button>
+<!-- Babde Universe Page -->
+<div id="universe" class="container hidden">
+  <div id="stars"></div>
+  <img id="slideshow" src="" alt="" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;opacity:0.3;z-index:-1;">
+  <div class="name" id="name">Babde 💜</div>
+  <div class="counter" id="counter"></div>
+  
+  <div id="nav">
+    <button onclick="showPage('homage','romantic')">🏠 Homage</button>
+    <button onclick="showPage('story','romantic')">📖 Love Story</button>
+    <button onclick="showPage('rain','sad')">🌧️ Rain</button>
+    <button onclick="showPage('universe-msg','romantic')">🌌 Universe</button>
+    <button onclick="showPage('proposal','energetic')">💍 Proposal</button>
+    <button onclick="showPage('secret','lofi')">🔐 Secret</button>
   </div>
-  <div class="final-secret" id="final-secret"></div>
-</div>
-<div id="secret" class="page">
-  <div class="msg-box">🔐 Enter Password: <input type="password" id="pass" placeholder="Password"><button onclick="checkPassword()">Unlock 💜</button></div>
-  <div id="secret-msg" class="msg-box" style="display:none;"></div>
-</div>
 
-<div class="conveyor-belt belt-top" id="proposal-top-belt">
-  <div class="track reverse">
-    <img src="image/pic1.jpg"><img src="image/pic2.jpg"><img src="image/pic3.jpg"><img src="image/pic4.jpg">
-    <img src="image/pic5.jpg"><img src="image/pic6.jpg"><img src="image/pic7.jpg"><img src="image/pic8.jpg">
+  <!-- Pages -->
+  <div id="homage" class="page hidden"><div class="msg-box">💜 Welcome Babde! This is your Eternal Love Universe.<br>Every day with you is magical 💖</div></div>
+  <div id="story" class="page hidden"><div class="msg-box">📖 Once upon a time, on 02/10/2024, two idiots fell in love…💕</div></div>
+  <div id="rain" class="page hidden"><div class="msg-box">🌧️ Even in my worst storms, you are my calm breeze💜</div></div>
+  <div id="universe-msg" class="page hidden"><div class="msg-box">🌌 In every universe, I would still choose you 💖</div></div>
+  <div id="proposal" class="page hidden">
+    <div class="msg-box" id="proposal-box">
+      <div class="ring" id="ring">💍</div><br>
+      Babde... Mazha shi lagna karshil? 💜<br>
+      <button onclick="yesForever()">Ho 💖</button><button onclick="yesForever()">Obviously Ho 😌</button>
+    </div>
   </div>
-</div>
-<div class="conveyor-belt belt-bottom" id="proposal-bottom-belt">
-  <div class="track">
-    <img src="image/pic13.jpg"><img src="image/pic14.jpg"><img src="image/pic15.jpg"><img src="image/pic16.jpg">
-    <img src="image/pic17.jpg"><img src="image/pic18.jpg"><img src="image/pic19.jpg"><img src="image/pic20.jpg">
+  <div id="secret" class="page hidden">
+    <div class="msg-box">🔐 Enter Password: <input type="password" id="pass" placeholder="Password"><button onclick="checkPassword()">Unlock 💜</button></div>
+    <div id="secret-msg" class="msg-box hidden"></div>
   </div>
+
+  <!-- Checklist -->
+  <div id="checklist">Secrets found: 0/4</div>
+
+  <!-- Conveyor belts -->
+  <div class="conveyor-belt belt-top" id="top-belt">
+    <div class="track reverse">
+      <img src="image/pic1.jpg"><img src="image/pic2.jpg"><img src="image/pic3.jpg"><img src="image/pic4.jpg">
+      <img src="image/pic5.jpg"><img src="image/pic6.jpg"><img src="image/pic7.jpg"><img src="image/pic8.jpg">
+    </div>
+  </div>
+  <div class="conveyor-belt belt-bottom" id="bottom-belt">
+    <div class="track">
+      <img src="image/pic9.jpg"><img src="image/pic10.jpg"><img src="image/pic11.jpg"><img src="image/pic12.jpg">
+      <img src="image/pic13.jpg"><img src="image/pic14.jpg"><img src="image/pic15.jpg"><img src="image/pic16.jpg">
+    </div>
+  </div>
+
 </div>
 
-<div id="checklist">Secrets found: 0/4</div>
-
+<!-- Music -->
 <audio id="romantic" loop><source src="https://www.bensound.com/bensound-music/bensound-romantic.mp3" type="audio/mp3"></audio>
 <audio id="sad" loop><source src="https://www.bensound.com/bensound-music/bensound-slowmotion.mp3" type="audio/mp3"></audio>
 <audio id="lofi" loop><source src="https://www.bensound.com/bensound-music/bensound-littleidea.mp3" type="audio/mp3"></audio>
@@ -98,90 +109,128 @@ button:hover{background:rgba(255,255,255,.35);}
 <audio id="fadeSFX" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_42619.mp3?filename=button-124113.mp3"></audio>
 
 <script>
-for(let i=0;i<150;i++){
-let s=document.createElement('div');s.className='star';s.style.top=Math.random()*100+'%';s.style.left=Math.random()*100+'%';s.style.width=s.style.height=Math.random()*2+'px';document.getElementById('stars').appendChild(s);
+let secretsFound=0;
+const checklist=document.getElementById('checklist');
+
+/* Landing -> Universe */
+function enterUniverse(){
+  document.getElementById('landing').classList.add('hidden');
+  document.getElementById('universe').classList.remove('hidden');
+  initUniverse();
 }
 
-const slides=["image/pic1.jpg","image/pic2.jpg","image/pic3.jpg"];
-let slideIndex=0;
-const slideshow=document.getElementById('slideshow');
-setInterval(()=>{slideshow.src=slides[slideIndex];slideIndex=(slideIndex+1)%slides.length;},5000);
+/* Init stars, slideshow, counter */
+function initUniverse(){
+  for(let i=0;i<150;i++){
+    let s=document.createElement('div');s.className='star';s.style.top=Math.random()*100+'%';s.style.left=Math.random()*100+'%';s.style.width=s.style.height=Math.random()*2+'px';document.getElementById('stars').appendChild(s);
+  }
+  const slides=["https://via.placeholder.com/600x800?text=Love1","https://via.placeholder.com/600x800?text=Love2","https://via.placeholder.com/600x800?text=Love3"];
+  let slideIndex=0;
+  const slideshow=document.getElementById('slideshow');
+  setInterval(()=>{slideshow.src=slides[slideIndex];slideIndex=(slideIndex+1)%slides.length;},5000);
 
-const startDate=new Date("2024-10-02T00:00:00");
-function updateCounter(){
-const now=new Date();
-const diff=now-startDate;
-const d=Math.floor(diff/(1000*60*60*24));
-const h=Math.floor((diff/(1000*60*60))%24);
-const m=Math.floor((diff/(1000*60))%60);
-document.getElementById("counter").innerText="Babde, we have been in love for "+d+" days "+h+" hours "+m+" minutes 💜";
+  const startDate=new Date("2024-10-02T00:00:00");
+  function updateCounter(){
+    const now=new Date();
+    const diff=now-startDate;
+    const d=Math.floor(diff/(1000*60*60*24));
+    const h=Math.floor((diff/(1000*60*60))%24);
+    const m=Math.floor((diff/(1000*60))%60);
+    document.getElementById("counter").innerText="Babde, we have been in love for "+d+" days "+h+" hours "+m+" minutes 💜";
+  }
+  setInterval(updateCounter,1000);
+  updateCounter();
 }
-setInterval(updateCounter,1000);
-updateCounter();
 
-let currentPage="",currentMusic=null,secretsFound=0,secret4Unlocked=false;
-function updateChecklist(){document.getElementById("checklist").innerText="Secrets found: "+secretsFound+"/4";}
+/* Page Nav & Music */
+let currentPage="";
+let currentMusic=null;
 function showPage(id,musicType){
-if(currentPage){document.getElementById(currentPage).style.display="none";}
-document.getElementById(id).style.display="block";
-currentPage=id;
-if(currentMusic) currentMusic.pause();
-currentMusic=document.getElementById(musicType);
-currentMusic.currentTime=0;
-currentMusic.play();
-document.getElementById("fadeSFX").play();
+  if(currentPage){document.getElementById(currentPage).classList.add('hidden');}
+  document.getElementById(id).classList.remove('hidden');
+  currentPage=id;
+  if(currentMusic) currentMusic.pause();
+  currentMusic=document.getElementById(musicType);
+  currentMusic.currentTime=0;
+  currentMusic.play();
+  document.getElementById("fadeSFX").play();
 }
 
-let taps=0;
-document.getElementById("name").addEventListener("click",()=>{
-taps++;if(taps===7){alert("Imagine Appla lagna zala, 2-3 years ni appla sarkha 2 pora astil… 😌💜"); secretsFound++; updateChecklist();}
-});
-
-function checkPassword(){
-let val=document.getElementById("pass").value;
-if(val==="021024"){
-document.getElementById("secret-msg").style.display="block";
-document.getElementById("secret-msg").innerText="Hamesha bass TU ani MI 💖\nTu majhi aahes ani nehmi rahnar.";
-secretsFound++; updateChecklist();
-}
-}
-
+/* Proposal */
 function yesForever(){
-let box=document.getElementById("proposal-box");
-box.innerHTML="FOREVER STARTS NOW 💜";
-document.getElementById('proposal-top-belt').style.display='block';
-document.getElementById('proposal-bottom-belt').style.display='block';
+  const proposalBox=document.getElementById('proposal-box');
+  proposalBox.innerHTML="FOREVER STARTS NOW 💜";
 
-for(let i=0;i<50;i++){let f=document.createElement("div");f.className="firework";f.style.left=Math.random()*100+"vw";f.style.top=Math.random()*100+"vh";f.innerHTML="✨";document.body.appendChild(f);setTimeout(()=>f.remove(),1500);}
-for(let i=0;i<30;i++){let s=document.createElement("div");s.className="sparkle";s.innerHTML="💖";s.style.left=Math.random()*100+"vw";s.style.top=Math.random()*100+"vh";document.body.appendChild(s);setTimeout(()=>s.remove(),6000);}
+  // show belts
+  document.getElementById('top-belt').style.display='block';
+  document.getElementById('bottom-belt').style.display='block';
 
-setTimeout(()=>{
-document.body.classList.add("fade-out");
-setTimeout(()=>{
-document.body.classList.remove("fade-out");
-const finalBox=document.getElementById("final-secret");
-finalBox.innerText="💖 YOUR SECRET LOVE MESSAGE GOES HERE 💖";
-finalBox.classList.add("show");
-secret4Unlocked=true; secretsFound++; updateChecklist();
-},30000);
-},0);
+  // fireworks & hearts
+  for(let i=0;i<50;i++){
+    let f=document.createElement("div");f.className="firework";f.style.left=Math.random()*100+"vw";f.style.top=Math.random()*100+"vh";f.innerHTML="✨";document.body.appendChild(f);
+    setTimeout(()=>f.remove(),1500);
+  }
+  for(let i=0;i<30;i++){
+    let h=document.createElement("div");h.className="heart";h.innerHTML=["❤️","💖","💕","🌸"][Math.floor(Math.random()*4)];
+    h.style.left=Math.random()*100+"vw";h.style.fontSize=(Math.random()*20+10)+"px";document.body.appendChild(h);
+    setTimeout(()=>h.remove(),5000);
+  }
+
+  // After 30s show secret 4 hint
+  setTimeout(()=>{
+    secretsFound++;
+    updateChecklist();
+    const secret4=document.createElement('div');
+    secret4.className='msg-box';
+    secret4.innerText="Wait… I think you found something else… 💖";
+    document.getElementById('universe').appendChild(secret4);
+  },30000);
 }
 
+/* Checklist */
+function updateChecklist(){ checklist.innerText="Secrets found: "+secretsFound+"/4"; }
+
+/* Password Secret */
+function checkPassword(){
+  let val=document.getElementById("pass").value;
+  if(val==="021024"){
+    secretsFound++;
+    updateChecklist();
+    const sm=document.getElementById("secret-msg");
+    sm.classList.remove('hidden');
+    sm.innerText="Hamesha bass TU ani MI 💖\nTu majhi aahes ani nehmi rahnar.";
+  }
+}
+
+/* Floating Hearts (Background) */
 setInterval(()=>{
-const heart=document.createElement("div");
-heart.classList.add("heart");
-heart.innerHTML=["❤️","💖","💕","🌸"][Math.floor(Math.random()*4)];
-heart.style.left=Math.random()*100+"vw";
-heart.style.fontSize=(Math.random()*20+10)+"px";
-heart.style.animationDuration=(Math.random()*2+3)+"s";
-document.body.appendChild(heart);
-setTimeout(()=>heart.remove(),5000);
+  const heart=document.createElement("div");
+  heart.classList.add("heart");
+  heart.innerHTML=["❤️","💖","💕","🌸"][Math.floor(Math.random()*4)];
+  heart.style.left=Math.random()*100+"vw";
+  heart.style.fontSize=(Math.random()*20+10)+"px";
+  document.body.appendChild(heart);
+  setTimeout(()=>heart.remove(),5000);
 },400);
 
-let firstClick=false;
-document.body.addEventListener("click",()=>{
-if(!firstClick){firstClick=true; if(currentMusic) currentMusic.play();}
+/* Future Kids Secret (Taps) */
+let taps=0;
+document.getElementById("name").addEventListener("click",()=>{
+  taps++;
+  if(taps===7){ secretsFound++; updateChecklist(); alert("Imagine Appla lagna zala, 2-3 years ni appla sarkha 2 pora astil… 😌💜"); }
 });
+
+/* Ring hold for Secret 4 */
+let ring=document.getElementById("ring");
+let holdTimer=null;
+ring.addEventListener("mousedown",()=>{
+  holdTimer=setTimeout(()=>{
+    secretsFound++;
+    updateChecklist();
+    alert("🎉 Secret 4 unlocked! You can type your final message here 💖");
+  },1500);
+});
+ring.addEventListener("mouseup",()=>{ clearTimeout(holdTimer); });
 </script>
 </body>
 </html>
