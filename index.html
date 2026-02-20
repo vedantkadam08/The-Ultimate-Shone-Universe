@@ -42,10 +42,10 @@ button:hover{background:rgba(255,255,255,.35);}
 <!-- Landing Page -->
 <div id="landing" class="container">
   <h1>Open When Messages 💌</h1>
-  <div class="msg-box" onclick="openFromLanding('homage','romantic')">Open when you're sad 😢</div>
-  <div class="msg-box" onclick="openFromLanding('story','romantic')">Open when you miss me 💖</div>
-  <div class="msg-box" onclick="openFromLanding('rain','sad')">Open when you can't sleep 🌙</div>
-  <div class="msg-box" onclick="openFromLanding('universe-msg','romantic')">Open when you need motivation ⚡</div>
+  <div class="msg-box" onclick="openFromLandingPage('homage','romantic')">Open when you're sad 😢</div>
+  <div class="msg-box" onclick="openFromLandingPage('story','romantic')">Open when you miss me 💖</div>
+  <div class="msg-box" onclick="openFromLandingPage('rain','sad')">Open when you can't sleep 🌙</div>
+  <div class="msg-box" onclick="openFromLandingPage('universe-msg','romantic')">Open when you need motivation ⚡</div>
   <button onclick="enterUniverse()">Enter Babde's Universe 💜</button>
 </div>
 
@@ -112,17 +112,27 @@ const checklist=document.getElementById('checklist');
 let currentPage="";
 let currentMusic=null;
 
-/* Landing -> Universe */
+/* Landing -> Universe button */
 function enterUniverse(){
   document.getElementById('landing').classList.add('hidden');
   document.getElementById('universe').classList.remove('hidden');
   initUniverse();
 }
 
-/* Open page from Landing directly */
-function openFromLanding(pageId,musicType){
-  enterUniverse();
-  setTimeout(()=>{showPage(pageId,musicType)},100); // small delay ensures universe loaded
+/* Landing "Open When" messages directly open page without Universe homepage */
+function openFromLandingPage(pageId, musicType){
+  document.getElementById('landing').classList.add('hidden');
+  // show only the page
+  const page=document.getElementById(pageId);
+  if(page) page.classList.remove('hidden');
+  currentPage=pageId;
+
+  // play music safely
+  if(currentMusic) currentMusic.pause();
+  currentMusic=document.getElementById(musicType);
+  if(currentMusic){ currentMusic.currentTime=0; currentMusic.play().catch(()=>{}); }
+  const fade=document.getElementById("fadeSFX");
+  if(fade){ fade.play().catch(()=>{}); }
 }
 
 /* Init stars, slideshow, counter */
@@ -165,7 +175,7 @@ function showPage(id,musicType){
   if(fade){ fade.play().catch(()=>{}); }
 }
 
-/* Proposal */
+/* Proposal, checklist, secrets, floating hearts remain unchanged */
 function yesForever(){
   const proposalBox=document.getElementById('proposal-box');
   proposalBox.innerHTML="FOREVER STARTS NOW 💜";
@@ -190,10 +200,8 @@ function yesForever(){
   },30000);
 }
 
-/* Checklist */
 function updateChecklist(){ checklist.innerText="Secrets found: "+secretsFound+"/4"; }
 
-/* Password Secret */
 function checkPassword(){
   let val=document.getElementById("pass").value;
   if(val==="021024"){
@@ -205,7 +213,7 @@ function checkPassword(){
   }
 }
 
-/* Floating Hearts (Background) */
+/* Floating Hearts */
 setInterval(()=>{
   const heart=document.createElement("div");
   heart.classList.add("heart");
@@ -216,14 +224,12 @@ setInterval(()=>{
   setTimeout(()=>heart.remove(),5000);
 },400);
 
-/* Future Kids Secret (Taps) */
 let taps=0;
 document.getElementById("name").addEventListener("click",()=>{
   taps++;
   if(taps===7){ secretsFound++; updateChecklist(); alert("Imagine Appla lagna zala, 2-3 years ni appla sarkha 2 pora astil… 😌💜"); }
 });
 
-/* Ring hold for Secret 4 */
 let holdTimer=null;
 document.addEventListener("DOMContentLoaded", function(){
   const ring=document.getElementById("ring");
