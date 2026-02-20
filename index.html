@@ -13,7 +13,7 @@ body{background:linear-gradient(135deg,#ff75c3,#9b5de5);display:flex;justify-con
 .container{position:relative;z-index:1;width:90%;max-width:600px;text-align:center;padding:20px;}
 button{margin:5px;padding:10px 18px;border:none;border-radius:25px;background:rgba(255,255,255,.2);color:white;font-size:1rem;cursor:pointer;transition:.3s;}
 button:hover{background:rgba(255,255,255,.35);}
-.msg-box{background:rgba(255,255,255,.15);border-radius:15px;padding:15px;margin:15px 0;animation:floatBox 6s ease-in-out infinite;}
+.msg-box{background:rgba(255,255,255,.15);border-radius:15px;padding:15px;margin:15px 0;animation:floatBox 6s ease-in-out infinite;cursor:pointer;}
 @keyframes floatBox{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px)}}
 #stars{position:absolute;top:0;left:0;width:100%;height:100%;z-index:0;overflow:hidden;}
 .star{position:absolute;width:2px;height:2px;background:white;border-radius:50%;opacity:0.8;}
@@ -42,14 +42,14 @@ button:hover{background:rgba(255,255,255,.35);}
 <!-- Landing Page -->
 <div id="landing" class="container">
   <h1>Open When Messages 💌</h1>
-  <div class="msg-box">Open when you're sad 😢</div>
-  <div class="msg-box">Open when you miss me 💖</div>
-  <div class="msg-box">Open when you can't sleep 🌙</div>
-  <div class="msg-box">Open when you need motivation ⚡</div>
+  <div class="msg-box" onclick="openFromLanding('homage','romantic')">Open when you're sad 😢</div>
+  <div class="msg-box" onclick="openFromLanding('story','romantic')">Open when you miss me 💖</div>
+  <div class="msg-box" onclick="openFromLanding('rain','sad')">Open when you can't sleep 🌙</div>
+  <div class="msg-box" onclick="openFromLanding('universe-msg','romantic')">Open when you need motivation ⚡</div>
   <button onclick="enterUniverse()">Enter Babde's Universe 💜</button>
 </div>
 
-<!-- Babde Universe Page -->
+<!-- Universe Page -->
 <div id="universe" class="container hidden">
   <div id="stars"></div>
   <img id="slideshow" src="" alt="" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;opacity:0.3;z-index:-1;">
@@ -109,12 +109,20 @@ button:hover{background:rgba(255,255,255,.35);}
 <script>
 let secretsFound=0;
 const checklist=document.getElementById('checklist');
+let currentPage="";
+let currentMusic=null;
 
 /* Landing -> Universe */
 function enterUniverse(){
   document.getElementById('landing').classList.add('hidden');
   document.getElementById('universe').classList.remove('hidden');
   initUniverse();
+}
+
+/* Open page from Landing directly */
+function openFromLanding(pageId,musicType){
+  enterUniverse();
+  setTimeout(()=>{showPage(pageId,musicType)},100); // small delay ensures universe loaded
 }
 
 /* Init stars, slideshow, counter */
@@ -140,18 +148,21 @@ function initUniverse(){
   updateCounter();
 }
 
-/* Page Nav & Music */
-let currentPage="";
-let currentMusic=null;
+/* Page Nav & Music with safety checks */
 function showPage(id,musicType){
-  if(currentPage){document.getElementById(currentPage).classList.add('hidden');}
-  document.getElementById(id).classList.remove('hidden');
+  if(currentPage){
+    const oldPage=document.getElementById(currentPage);
+    if(oldPage) oldPage.classList.add('hidden');
+  }
+  const newPage=document.getElementById(id);
+  if(newPage) newPage.classList.remove('hidden');
   currentPage=id;
+
   if(currentMusic) currentMusic.pause();
   currentMusic=document.getElementById(musicType);
-  currentMusic.currentTime=0;
-  currentMusic.play().catch(()=>{}); // mobile-safe
-  document.getElementById("fadeSFX").play().catch(()=>{}); // mobile-safe
+  if(currentMusic){ currentMusic.currentTime=0; currentMusic.play().catch(()=>{}); }
+  const fade=document.getElementById("fadeSFX");
+  if(fade){ fade.play().catch(()=>{}); }
 }
 
 /* Proposal */
@@ -212,7 +223,7 @@ document.getElementById("name").addEventListener("click",()=>{
   if(taps===7){ secretsFound++; updateChecklist(); alert("Imagine Appla lagna zala, 2-3 years ni appla sarkha 2 pora astil… 😌💜"); }
 });
 
-/* Ring hold for Secret 4 - safe */
+/* Ring hold for Secret 4 */
 let holdTimer=null;
 document.addEventListener("DOMContentLoaded", function(){
   const ring=document.getElementById("ring");
