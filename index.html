@@ -19,15 +19,13 @@ button:hover{background:rgba(255,255,255,.35);}
 .page{display:none;}
 .msg-box{background:rgba(255,255,255,.15);border-radius:15px;padding:15px;margin:15px 0;animation:floatBox 6s ease-in-out infinite;}
 @keyframes floatBox{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px)}}
-.ring{font-size:70px;animation:glow 1.5s infinite alternate;}
+.ring{font-size:70px;animation:glow 1.5s infinite alternate;cursor:pointer;display:inline-block;}
 @keyframes glow{from{transform:scale(1)}to{transform:scale(1.2);filter:drop-shadow(0 0 20px pink)}}
 .firework{position:absolute;font-size:24px;animation:explode 1s ease-out forwards;}
 @keyframes explode{to{transform:translateY(-100px) scale(2);opacity:0}}
 .fade-out{animation:fadeout 3s forwards;}
 @keyframes fadeout{to{opacity:0}}
 #slideshow{position:absolute;top:0;left:0;width:100%;height:100%;z-index:-1;object-fit:cover;opacity:0.3;}
-
-/* --- Conveyor Belts --- */
 .conveyor-belt{position:fixed;width:100%;overflow:hidden;white-space:nowrap;z-index:1;display:none;opacity:0.7;}
 .belt-top{top:10px;}
 .belt-bottom{bottom:10px;}
@@ -35,11 +33,11 @@ button:hover{background:rgba(255,255,255,.35);}
 .track img{height:100px;margin:0 10px;border:3px solid white;border-radius:8px;}
 .track.reverse{animation-direction:reverse;}
 @keyframes slide{from{transform:translateX(0);}to{transform:translateX(-50%);}}
-
-/* Sparkle hearts */
 .sparkle{position:absolute;font-size:20px;animation:floatSparkle 3s ease-in-out infinite;}
 @keyframes floatSparkle{0%{transform:translateY(0)}50%{transform:translateY(-10px)}100%{transform:translateY(0)}}
 .heart{position:fixed;bottom:-50px;pointer-events:none;animation:float 5s linear infinite;font-size:20px;z-index:999;}
+#secret-checklist{position:fixed;top:10px;right:10px;background:rgba(255,255,255,.2);padding:10px 15px;border-radius:12px;font-size:1rem;z-index:9999;}
+#final-message{margin-top:10px;color:#ffb6c1;font-weight:bold;}
 </style>
 </head>
 <body>
@@ -66,7 +64,7 @@ button:hover{background:rgba(255,255,255,.35);}
   <div id="universe" class="page"><div class="msg-box">🌌 In every universe, I would still choose you 💖</div></div>
   <div id="proposal" class="page">
     <div class="msg-box" id="proposal-box">
-      <div class="ring">💍</div><br>
+      <div class="ring" id="proposal-ring">💍</div><br>
       Babde... Mazha shi lagna karshil? 💜<br>
       <button onclick="yesForever()">Ho 💖</button>
       <button onclick="yesForever()">Obviously Ho 😌</button>
@@ -78,24 +76,22 @@ button:hover{background:rgba(255,255,255,.35);}
   </div>
 </div>
 
-<!-- Conveyor belts for proposal -->
+<!-- Conveyor belts -->
 <div class="conveyor-belt belt-top" id="proposal-top-belt">
   <div class="track">
     <img src="image/pic1.jpg"><img src="image/pic2.jpg"><img src="image/pic3.jpg"><img src="image/pic4.jpg">
-    <img src="image/pic5.jpg"><img src="image/pic6.jpg"><img src="image/pic7.jpg"><img src="image/pic8.jpg">
-    <img src="image/pic9.jpg"><img src="image/pic10.jpg"><img src="image/pic11.jpg"><img src="image/pic12.jpg">
-    <img src="image/pic1.jpg"><img src="image/pic2.jpg"><img src="image/pic3.jpg"><img src="image/pic4.jpg">
-    <img src="image/pic5.jpg"><img src="image/pic6.jpg"><img src="image/pic7.jpg"><img src="image/pic8.jpg">
   </div>
 </div>
 <div class="conveyor-belt belt-bottom" id="proposal-bottom-belt">
   <div class="track reverse">
     <img src="image/pic13.jpg"><img src="image/pic14.jpg"><img src="image/pic15.jpg"><img src="image/pic16.jpg">
-    <img src="image/pic17.jpg"><img src="image/pic18.jpg"><img src="image/pic19.jpg"><img src="image/pic20.jpg">
-    <img src="image/pic21.jpg"><img src="image/pic22.jpg"><img src="image/pic23.jpg"><img src="image/pic24.jpg">
-    <img src="image/pic13.jpg"><img src="image/pic14.jpg"><img src="image/pic15.jpg"><img src="image/pic16.jpg">
-    <img src="image/pic17.jpg"><img src="image/pic18.jpg"><img src="image/pic19.jpg"><img src="image/pic20.jpg">
   </div>
+</div>
+
+<!-- Checklist Panel -->
+<div id="secret-checklist">
+  Secrets found: <span id="found-count">0</span> / 4
+  <div id="final-message"></div>
 </div>
 
 <!-- Audio -->
@@ -149,27 +145,47 @@ function showPage(id,musicType){
   document.getElementById("fadeSFX").play();
 }
 
+/* SECRET CHECKLIST LOGIC */
+let foundSecrets={};
+const totalSecrets=4;
+const finalSecretMessage = "💖 [YOUR SECRET LOVE MESSAGE HERE] 💖"; // <-- Replace with your message
+
+function unlockSecret(id){
+  if(!foundSecrets[id]){
+    foundSecrets[id]=true;
+    updateChecklist();
+  }
+}
+
+function updateChecklist(){
+  const count = Object.keys(foundSecrets).length;
+  document.getElementById("found-count").innerText=count;
+  if(count===totalSecrets){
+    document.getElementById("final-message").innerText = finalSecretMessage;
+  }
+}
+
 /* FUTURE KIDS SECRET */
 let taps=0;
 document.getElementById("name").addEventListener("click",()=>{
   taps++;
   if(taps===7){
     alert("Imagine Appla lagna zala, 2-3 years ni appla sarkha 2 pora astil. Ek mulgi ji full tuzha sarkhi asel ani ek mulga jo mazha sarkha asel… 😌💜");
-    unlockSecret("secret2");
+    unlockSecret("secret1");
   }
 });
 
-/* PASSWORD */
+/* PASSWORD SECRET */
 function checkPassword(){
   let val=document.getElementById("pass").value;
   if(val==="021024"){
     document.getElementById("secret-msg").style.display="block";
     document.getElementById("secret-msg").innerText="Hamesha bass TU ani MI 💖\nTu majhi aahes ani nehmi rahnar.";
-    unlockSecret("secret3");
+    unlockSecret("secret2");
   }
 }
 
-/* PROPOSAL */
+/* PROPOSAL SECRET */
 function yesForever(){
     let box=document.getElementById("proposal-box");
     box.innerHTML="FOREVER STARTS NOW 💜";
@@ -177,7 +193,6 @@ function yesForever(){
     const topBelt=document.getElementById('proposal-top-belt');
     const bottomBelt=document.getElementById('proposal-bottom-belt');
 
-    // Show conveyor belts
     topBelt.style.display='block';
     bottomBelt.style.display='block';
 
@@ -203,7 +218,7 @@ function yesForever(){
         setTimeout(()=>s.remove(),6000);
     }
 
-    unlockSecret("secret4"); // Example: proposal secret
+    unlockSecret("secret3");
 
     // 30 sec cinematic fade
     setTimeout(()=>{
@@ -226,13 +241,21 @@ setInterval(()=>{
   setTimeout(()=>heart.remove(),5000);
 },400);
 
-/* SECRET CHECKLIST */
-let foundSecrets={};
-function unlockSecret(id){
-  foundSecrets[id]=true;
-  console.log("Unlocked secret:",id);
-  // Here you can implement a checklist display logic
-}
+/* 4TH SECRET: Ring Tap & Hold */
+let ring=document.getElementById("proposal-ring");
+let holdTimer;
+ring.addEventListener("mousedown",()=>{
+  holdTimer=setTimeout(()=>{
+    ring.style.transform="scale(3)";
+    setTimeout(()=>{
+      ring.style.transform="scale(1)";
+      alert("💖 Secret 4 Unlocked! 💖");
+      unlockSecret("secret4");
+    },500);
+  },1500); // 1.5 sec hold
+});
+ring.addEventListener("mouseup",()=>{clearTimeout(holdTimer);});
+ring.addEventListener("mouseleave",()=>{clearTimeout(holdTimer);});
 </script>
 </body>
 </html>
