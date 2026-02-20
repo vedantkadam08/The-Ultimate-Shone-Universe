@@ -150,8 +150,8 @@ function showPage(id,musicType){
   if(currentMusic) currentMusic.pause();
   currentMusic=document.getElementById(musicType);
   currentMusic.currentTime=0;
-  currentMusic.play();
-  document.getElementById("fadeSFX").play();
+  currentMusic.play().catch(()=>{}); // mobile-safe
+  document.getElementById("fadeSFX").play().catch(()=>{}); // mobile-safe
 }
 
 /* Proposal */
@@ -160,6 +160,23 @@ function yesForever(){
   proposalBox.innerHTML="FOREVER STARTS NOW 💜";
   document.getElementById('top-belt').style.display='block';
   document.getElementById('bottom-belt').style.display='block';
+  for(let i=0;i<50;i++){
+    let f=document.createElement("div");f.className="firework";f.style.left=Math.random()*100+"vw";f.style.top=Math.random()*100+"vh";f.innerHTML="✨";document.body.appendChild(f);
+    setTimeout(()=>f.remove(),1500);
+  }
+  for(let i=0;i<30;i++){
+    let h=document.createElement("div");h.className="heart";h.innerHTML=["❤️","💖","💕","🌸"][Math.floor(Math.random()*4)];
+    h.style.left=Math.random()*100+"vw";h.style.fontSize=(Math.random()*20+10)+"px";document.body.appendChild(h);
+    setTimeout(()=>h.remove(),5000);
+  }
+  setTimeout(()=>{
+    secretsFound++;
+    updateChecklist();
+    const secret4=document.createElement('div');
+    secret4.className='msg-box';
+    secret4.innerText="Wait… I think you found something else… 💖";
+    document.getElementById('universe').appendChild(secret4);
+  },30000);
 }
 
 /* Checklist */
@@ -177,19 +194,44 @@ function checkPassword(){
   }
 }
 
-/* Ring hold fix (ONLY SAFE CHECK ADDED) */
-let ring=document.getElementById("ring");
-let holdTimer=null;
-if(ring){
-  ring.addEventListener("mousedown",()=>{
-    holdTimer=setTimeout(()=>{
-      secretsFound++;
-      updateChecklist();
-    },1500);
-  });
-  ring.addEventListener("mouseup",()=>{ clearTimeout(holdTimer); });
-}
-</script>
+/* Floating Hearts (Background) */
+setInterval(()=>{
+  const heart=document.createElement("div");
+  heart.classList.add("heart");
+  heart.innerHTML=["❤️","💖","💕","🌸"][Math.floor(Math.random()*4)];
+  heart.style.left=Math.random()*100+"vw";
+  heart.style.fontSize=(Math.random()*20+10)+"px";
+  document.body.appendChild(heart);
+  setTimeout(()=>heart.remove(),5000);
+},400);
 
+/* Future Kids Secret (Taps) */
+let taps=0;
+document.getElementById("name").addEventListener("click",()=>{
+  taps++;
+  if(taps===7){ secretsFound++; updateChecklist(); alert("Imagine Appla lagna zala, 2-3 years ni appla sarkha 2 pora astil… 😌💜"); }
+});
+
+/* Ring hold for Secret 4 - safe */
+let holdTimer=null;
+document.addEventListener("DOMContentLoaded", function(){
+  const ring=document.getElementById("ring");
+  if(ring){
+    ring.addEventListener("mousedown",()=>{
+      holdTimer=setTimeout(()=>{
+        secretsFound++;
+        updateChecklist();
+        alert(`🎉 Secret 4 unlocked! Babde… Shone… tujha shivay kahi nahi mazya jivanat 💜
+Tujha hassa mazya sobat saglya divsanna roshan karto.
+Tuzya lagna… tuzi gudi… tuzi ek ek goshta mazya manat ghar karto.
+Mi tuzya sobat jagayla khup anand ghetlo ahes, tu majhi sagli jagatli khushi ahes.
+Tuzya sobat sagla prem jagayala mi tayar ahes, tu majhi, mi tuzha… saglya shabdanekarun pan he sangayla yet nahi ki mi tujhyavina adhura ahes 💖
+Ani ek divas… Babde… ek divas appn pakka lagna karu 💍💜 💖`);
+      },1500);
+    });
+    ring.addEventListener("mouseup",()=>{ clearTimeout(holdTimer); });
+  }
+});
+</script>
 </body>
 </html>
