@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Babde Forever 💜</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif;}
+
+body{
+min-height:100vh;
+overflow:hidden;
+background:linear-gradient(-45deg,#ff9ed8,#c77dff,#ff6ec7,#a855f7);
+background-size:400% 400%;
+animation:gradient 15s ease infinite;
+color:white;
+transition:1s;
+}
+
+@keyframes gradient{
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
+}
+
+.container{
+min-height:100vh;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+text-align:center;
+padding:20px;
+position:relative;
+z-index:2;
+}
+
+.name{
+font-size:2.5rem;
+font-weight:bold;
+background:linear-gradient(90deg,#fff,#ffd6ff,#fff);
+background-size:200%;
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+animation:shine 3s linear infinite,float 3s ease-in-out infinite;
+cursor:pointer;
+}
+
+@keyframes shine{0%{background-position:0%}100%{background-position:200%}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+
+.counter{margin-top:10px;font-size:1rem;opacity:.9}
+
+button{
+margin:6px;
+padding:10px 18px;
+border:none;
+border-radius:25px;
+background:rgba(255,255,255,.2);
+color:white;
+}
+
+.page{display:none;margin-top:20px;white-space:pre-line;max-width:500px;}
+
+.ring{
+font-size:60px;
+animation:pop 1s ease forwards;
+}
+
+@keyframes pop{
+0%{transform:scale(0)}
+100%{transform:scale(1.2)}
+}
+
+.fade-out{animation:fadeout 3s forwards;}
+@keyframes fadeout{to{opacity:0}}
+
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<div class="name" id="name">Babde 💜</div>
+<div class="counter" id="counter"></div>
+
+<button onclick="proposalMode()">💍 Proposal</button>
+<button onclick="loveStory()">📖 Love Story</button>
+<button onclick="rainMode()">🌧️ Rain</button>
+<button onclick="secretPage()">🔐 Secret</button>
+
+<div id="message" class="page"></div>
+
+</div>
+
+<audio id="bgm" loop></audio>
+<audio id="heartbeat" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_4f2a7c5b9f.mp3?filename=heartbeat-11093.mp3"></audio>
+
+<script>
+
+/* ===== DAYS COUNTER ===== */
+const startDate=new Date("2024-10-02T00:00:00");
+function updateCounter(){
+const now=new Date();
+const diff=now-startDate;
+const days=Math.floor(diff/(1000*60*60*24));
+const hours=Math.floor((diff/(1000*60*60))%24);
+const minutes=Math.floor((diff/(1000*60))%60);
+document.getElementById("counter").innerText=
+"Babde, we have been in love for "+days+" days "+hours+" hours "+minutes+" minutes 💜";
+}
+setInterval(updateCounter,1000);
+updateCounter();
+
+/* ===== LOVE STORY ===== */
+function loveStory(){
+showMessage("Once upon a time...\nOn 02/10/2024,\nTwo idiots fell in love.\nAni tyancha world change zala forever 💖");
+}
+
+/* ===== RAIN ===== */
+function rainMode(){
+showMessage("Even in my worst storms,\nyou are my calm 🌧️💜");
+}
+
+/* ===== PASSWORD ===== */
+function secretPage(){
+let pass=prompt("Enter Password 💜");
+if(pass==="021024"){
+showMessage("Only you and me forever 💖\nTu majhi aahes ani nehmi rahnar.");
+}
+}
+
+/* ===== ULTRA PROPOSAL ===== */
+function proposalMode(){
+let msg=document.getElementById("message");
+msg.style.display="block";
+msg.innerHTML="<div class='ring'>💍</div><br>Babde...<br><br>Will you stay forever with me? 💜<br><br><button onclick='yesForever()'>Yes 💖</button><button onclick='yesForever()'>Of Course Yes 😌</button>";
+document.getElementById("heartbeat").play();
+}
+
+function yesForever(){
+document.getElementById("message").innerHTML="You just made me the happiest person alive 💜<br>This is just the beginning of our forever.";
+}
+
+/* ===== FUTURE KIDS (Tap Name 7 times) ===== */
+let taps=0;
+document.getElementById("name").addEventListener("click",()=>{
+taps++;
+if(taps===7){
+showMessage("Imagine tiny version of us running around…\nTujha smile ani majha attitude 😌💜");
+}
+});
+
+/* ===== BIRTHDAY MODE (11 OCT) ===== */
+let today=new Date();
+if(today.getDate()==11 && today.getMonth()==9){
+showMessage("Happy Birthday My Love 🎂💜");
+}
+
+/* ===== CINEMATIC END AFTER 1 MIN ===== */
+setTimeout(()=>{
+document.body.classList.add("fade-out");
+setTimeout(()=>{
+document.body.innerHTML="<div style='display:flex;justify-content:center;align-items:center;height:100vh;font-size:1.5rem;text-align:center;background:black;color:white;'>And this is just the beginning… 💜</div>";
+},3000);
+},60000);
+
+/* ===== MESSAGE ===== */
+function showMessage(text){
+let msg=document.getElementById("message");
+msg.style.display="block";
+msg.innerText=text;
+}
+
+</script>
+</body>
+</html>
