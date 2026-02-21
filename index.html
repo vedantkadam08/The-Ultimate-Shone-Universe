@@ -31,7 +31,9 @@ button:hover{background:rgba(255,255,255,.35);}
 .heart{position:fixed;bottom:-50px;pointer-events:none;animation:floatHeart 5s linear infinite;font-size:20px;z-index:999;}
 @keyframes floatHeart{0%{transform:translateY(0) rotate(0deg);opacity:1}100%{transform:translateY(-110vh) rotate(360deg);opacity:0}}
 #checklist{position:fixed;top:10px;right:10px;background:rgba(255,255,255,0.2);padding:10px 15px;border-radius:15px;font-size:0.9rem;z-index:999;}
+/* fix clickable buttons over slideshow */
 #slideshow{pointer-events:none;}
+/* ===== ADDED STRICT FIX ===== */
 .page{position:relative;z-index:2;}
 </style>
 </head>
@@ -47,7 +49,7 @@ button:hover{background:rgba(255,255,255,.35);}
   <button onclick="enterUniverse()">Enter Babde's Universe 💜</button>
 </div>
 
-<!-- Landing Subpages -->
+<!-- ===== ADDED LANDING SUBPAGES ===== -->
 <div id="sad-page" class="container hidden">
   <div class="msg-box">Hey Babde… even when you're sad, I’m always here 💜</div>
   <button onclick="goBack()">⬅ Back</button>
@@ -71,7 +73,8 @@ button:hover{background:rgba(255,255,255,.35);}
 <!-- Universe Page -->
 <div id="universe" class="container hidden">
   <div id="stars"></div>
-  <img id="slideshow" src="" alt="" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;opacity:0.3;z-index:-1;">
+  <!-- FIXED: Add valid initial src -->
+  <img id="slideshow" src="https://via.placeholder.com/600x800?text=Love1" alt="Slideshow Background" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;opacity:0.3;z-index:-1;">
   <div class="name" id="name">Babde 💜</div>
   <div class="counter" id="counter"></div>
 
@@ -116,6 +119,7 @@ button:hover{background:rgba(255,255,255,.35);}
       <img src="image/pic13.jpg"><img src="image/pic14.jpg"><img src="image/pic15.jpg"><img src="image/pic16.jpg">
     </div>
   </div>
+
 </div>
 
 <!-- Music -->
@@ -158,7 +162,7 @@ function enterUniverse(){
   initUniverse();
 }
 
-/* Init Universe */
+/* Init Universe visuals and counter */
 function initUniverse(){
   for(let i=0;i<150;i++){
     let s=document.createElement('div');s.className='star';s.style.top=Math.random()*100+'%';s.style.left=Math.random()*100+'%';s.style.width=s.style.height=Math.random()*2+'px';document.getElementById('stars').appendChild(s);
@@ -181,16 +185,13 @@ function initUniverse(){
   updateCounter();
 }
 
-/* ===== FIXED Universe Page Navigation ===== */
+/* Page nav */
 function showPage(id,musicType){
-  // hide all universe pages first
-  const pages=document.querySelectorAll("#universe .page");
-  pages.forEach(p=>p.classList.add("hidden"));
-  // show the selected
+  if(currentPage){ const old=document.getElementById(currentPage); if(old) old.classList.add('hidden'); }
   const page=document.getElementById(id);
   if(page) page.classList.remove('hidden');
   currentPage=id;
-
+  
   if(currentMusic) currentMusic.pause();
   currentMusic=document.getElementById(musicType);
   if(currentMusic){ currentMusic.currentTime=0; currentMusic.play().catch(()=>{}); }
@@ -204,6 +205,7 @@ function yesForever(){
   proposalBox.innerHTML="FOREVER STARTS NOW 💜";
   document.getElementById('top-belt').style.display='block';
   document.getElementById('bottom-belt').style.display='block';
+  
   for(let i=0;i<50;i++){
     let f=document.createElement("div");f.className="firework";f.style.left=Math.random()*100+"vw";f.style.top=Math.random()*100+"vh";f.innerHTML="✨";document.body.appendChild(f);
     setTimeout(()=>f.remove(),1500);
@@ -277,29 +279,44 @@ Ani ek divas… Babde… ek divas appn pakka lagna karu 💍💜 💖`);
   }
 });
 
-/* Landing page overrides */
+/* ===== STRICT OVERRIDES ===== */
 const originalOpenFromLandingPage = openFromLandingPage;
+
 openFromLandingPage = function(pageId, musicType){
+
   const map = {
     "homage": "sad-page",
     "story": "miss-page",
     "rain": "sleep-page",
     "universe-msg": "motivation-page"
   };
+
   if(map[pageId]){
     document.getElementById("landing").classList.add("hidden");
+
     const subs = ["sad-page","miss-page","sleep-page","motivation-page"];
     subs.forEach(p => document.getElementById(p).classList.add("hidden"));
+
     document.getElementById(map[pageId]).classList.remove("hidden");
     return;
   }
+
   originalOpenFromLandingPage(pageId, musicType);
 };
+
 function goBack(){
   const subs = ["sad-page","miss-page","sleep-page","motivation-page"];
   subs.forEach(p => document.getElementById(p).classList.add("hidden"));
   document.getElementById("landing").classList.remove("hidden");
 }
+
+const originalShowPage = showPage;
+
+showPage = function(id, musicType){
+  const pages = document.querySelectorAll("#universe .page");
+  pages.forEach(p => p.classList.add("hidden"));
+  originalShowPage(id, musicType);
+};
 </script>
 </body>
 </html>
