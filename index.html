@@ -33,6 +33,8 @@ button:hover{background:rgba(255,255,255,.35);}
 #checklist{position:fixed;top:10px;right:10px;background:rgba(255,255,255,0.2);padding:10px 15px;border-radius:15px;font-size:0.9rem;z-index:999;}
 /* fix clickable buttons over slideshow */
 #slideshow{pointer-events:none;}
+/* ===== ADDED STRICT FIX ===== */
+.page{position:relative;z-index:2;}
 </style>
 </head>
 <body>
@@ -45,6 +47,27 @@ button:hover{background:rgba(255,255,255,.35);}
   <div class="msg-box" onclick="openFromLandingPage('rain','sad')">Open when you can't sleep 🌙</div>
   <div class="msg-box" onclick="openFromLandingPage('universe-msg','romantic')">Open when you need motivation ⚡</div>
   <button onclick="enterUniverse()">Enter Babde's Universe 💜</button>
+</div>
+
+<!-- ===== ADDED LANDING SUBPAGES ===== -->
+<div id="sad-page" class="container hidden">
+  <div class="msg-box">Hey Babde… even when you're sad, I’m always here 💜</div>
+  <button onclick="goBack()">⬅ Back</button>
+</div>
+
+<div id="miss-page" class="container hidden">
+  <div class="msg-box">Missing me? I’m always wrapped around your heart 💖</div>
+  <button onclick="goBack()">⬅ Back</button>
+</div>
+
+<div id="sleep-page" class="container hidden">
+  <div class="msg-box">Close your eyes… imagine my hand in yours 🌙💜</div>
+  <button onclick="goBack()">⬅ Back</button>
+</div>
+
+<div id="motivation-page" class="container hidden">
+  <div class="msg-box">You are powerful. You are unstoppable ⚡💖</div>
+  <button onclick="goBack()">⬅ Back</button>
 </div>
 
 <!-- Universe Page -->
@@ -254,6 +277,45 @@ Ani ek divas… Babde… ek divas appn pakka lagna karu 💍💜 💖`);
     ring.addEventListener("mouseup",()=>{ clearTimeout(holdTimer); });
   }
 });
+
+/* ===== STRICT OVERRIDES ===== */
+const originalOpenFromLandingPage = openFromLandingPage;
+
+openFromLandingPage = function(pageId, musicType){
+
+  const map = {
+    "homage": "sad-page",
+    "story": "miss-page",
+    "rain": "sleep-page",
+    "universe-msg": "motivation-page"
+  };
+
+  if(map[pageId]){
+    document.getElementById("landing").classList.add("hidden");
+
+    const subs = ["sad-page","miss-page","sleep-page","motivation-page"];
+    subs.forEach(p => document.getElementById(p).classList.add("hidden"));
+
+    document.getElementById(map[pageId]).classList.remove("hidden");
+    return;
+  }
+
+  originalOpenFromLandingPage(pageId, musicType);
+};
+
+function goBack(){
+  const subs = ["sad-page","miss-page","sleep-page","motivation-page"];
+  subs.forEach(p => document.getElementById(p).classList.add("hidden"));
+  document.getElementById("landing").classList.remove("hidden");
+}
+
+const originalShowPage = showPage;
+
+showPage = function(id, musicType){
+  const pages = document.querySelectorAll("#universe .page");
+  pages.forEach(p => p.classList.add("hidden"));
+  originalShowPage(id, musicType);
+};
 </script>
 </body>
 </html>
